@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
-import { FontAwesome} from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system';
 
-export default function ScansLibrary() {
+export default function ScansLibrary( {storage} ) {
     const [cameraParams, setCameraParams] = useState({
         hasPermission: null,
         type: Camera.Constants.Type.back
@@ -25,9 +25,18 @@ export default function ScansLibrary() {
     }, [])
 
     const takePicture = () => {
+        const reference = storage.ref()
         ref.current.takePictureAsync()
-        .then((photo) => {
-            console.log(photo)
+        .then(( {uri} ) => {
+            return fetch(uri);
+        })
+        .then((response) => response.blob())
+        .then((blob) =>{
+            const imageName = 'image' + '-' + new Date()
+            reference.child(imageName).put(blob)
+        })
+        .then((snapshot) => {
+            console.log('Uploaded image file successfully')
         })
         .catch(err => console.log(err))
     }
