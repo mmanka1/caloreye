@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import HomeScreen from './screens/homeScreen';
-import summaryScreen from './screens/summaryScreen';
+import SummaryScreen from './screens/summaryScreen';
 import ScansLibrary from './screens/scansLibrary';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -24,6 +24,7 @@ export default function App() {
           <Stack.Screen name="Scan">
             {props => <ScansLibrary {...props} storage={firebase.storage()} environment = {Environment}/>}
           </Stack.Screen>
+          <Stack.Screen name="Nutrition Summary" component={SummaryScreen}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function ScansLibrary( {storage, environment, navigation} ) {
     const [cameraParams, setCameraParams] = useState({
@@ -11,7 +10,6 @@ export default function ScansLibrary( {storage, environment, navigation} ) {
     })
     const ref = useRef(null)
     const [image, setImage] = useState({uri: null})
-    const [googleResponse, setGoogleResponse] = useState(null)
 
     useEffect(() => {
         Permissions.askAsync(Permissions.CAMERA)
@@ -79,7 +77,6 @@ export default function ScansLibrary( {storage, environment, navigation} ) {
             })
         })
         const searchStr = wordsList.toString().replace(/,/g, '')
-        console.log(searchStr)
 
         const indexOfCalories = searchStr.indexOf("Calories") + 8
         const indexOfFat = searchStr.indexOf("Fat") + 3
@@ -91,15 +88,18 @@ export default function ScansLibrary( {storage, environment, navigation} ) {
         const carbCount = indexOfCarbs
         const proteinCount = indexOfProtein
 
-        const numCalories = getMacroValue(calorieCount, searchStr)
-        const numFat = getMacroValue(fatCount, searchStr)
-        const numCarbs = getMacroValue(carbCount, searchStr)
-        const numProtein = getMacroValue(proteinCount, searchStr)
+        const numCalories = parseInt(getMacroValue(calorieCount, searchStr))
+        const numFat = parseInt(getMacroValue(fatCount, searchStr))
+        const numCarbs = parseInt(getMacroValue(carbCount, searchStr))
+        const numProtein = parseInt(getMacroValue(proteinCount, searchStr))
 
-        console.log(numCalories)
-        console.log(numFat)
-        console.log(numCarbs)
-        console.log(numProtein)
+        setImage({uri: null})
+        navigation.navigate('Nutrition Summary', {
+            calories: numCalories,
+            fat: numFat,
+            carbs: numCarbs,
+            protein: numProtein,
+        });
     }
 
     const textDetector = () => {
