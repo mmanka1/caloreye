@@ -6,7 +6,8 @@ import ScansLibrary from './screens/scansLibrary';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
-import config from './config/apiConfig';
+import config from './config/firebaseConfig';
+import Environment from './config/environmentConfig';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +21,7 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Scan">
-            {props => <ScansLibrary {...props} storage={firebase.storage()}/>}
+            {props => <ScansLibrary {...props} storage={firebase.storage()} environment = {Environment}/>}
           </Stack.Screen>
         </Stack.Navigator>
     </NavigationContainer>
