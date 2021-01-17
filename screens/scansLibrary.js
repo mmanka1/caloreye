@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
+import AnimatedLoader from "react-native-animated-loader";
 
 export default function ScansLibrary( {storage, environment, navigation} ) {
     const [cameraParams, setCameraParams] = useState({
@@ -10,6 +11,7 @@ export default function ScansLibrary( {storage, environment, navigation} ) {
     })
     const ref = useRef(null)
     const [image, setImage] = useState({uri: null})
+    const [loaderVisible, setLoaderVisible] = useState(false)
 
     useEffect(() => {
         Permissions.askAsync(Permissions.CAMERA)
@@ -41,6 +43,7 @@ export default function ScansLibrary( {storage, environment, navigation} ) {
         })
         .then((uploadUrl) => {
             setImage({uri: uploadUrl})
+            setLoaderVisible(false)
         })
         .catch(err => console.log(err))
     }
@@ -94,6 +97,7 @@ export default function ScansLibrary( {storage, environment, navigation} ) {
         const numProtein = parseInt(getMacroValue(proteinCount, searchStr))
 
         setImage({uri: null})
+        setLoaderVisible(false)
         navigation.navigate('Nutrition Summary', {
             calories: numCalories,
             fat: numFat,
@@ -150,19 +154,43 @@ export default function ScansLibrary( {storage, environment, navigation} ) {
                         <View style={styles.buttonContainer}>
                         {//If no picture taken, show take picture button, otherwise show checkmark button
                         image.uri === null ? (
-                            <TouchableOpacity style={styles.button} onPress={() => takePicture()}>
-                                <Image
-                                    style={styles.tinyLogo}
-                                    source={require('../assets/button.png')}
-                                />
-                            </TouchableOpacity>
+                            <View>
+                                <AnimatedLoader
+                                    visible={loaderVisible}
+                                    overlayColor="rgba(255,255,255,0.75)"
+                                    source={require("../loader.json")}
+                                    animationStyle={styles.lottie}
+                                    speed={1}
+                                ></AnimatedLoader>
+                                <TouchableOpacity style={styles.button} onPress={() => {
+                                    setLoaderVisible(true)
+                                    takePicture()
+                                }}>
+                                    <Image
+                                        style={styles.tinyLogo}
+                                        source={require('../assets/button.png')}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         ) : (
-                            <TouchableOpacity style={styles.button} onPress={() => textDetector()}>
-                                <Image
-                                    style={styles.tinyLogo}
-                                    source={require('../assets/checkmark.png')}
-                                />
-                            </TouchableOpacity>
+                            <View>
+                                <AnimatedLoader
+                                    visible={loaderVisible}
+                                    overlayColor="rgba(255,255,255,0.75)"
+                                    source={require("../loader.json")}
+                                    animationStyle={styles.lottie}
+                                    speed={1}
+                                ></AnimatedLoader>
+                                <TouchableOpacity style={styles.button} onPress={() => {
+                                    setLoaderVisible(true)
+                                    textDetector()
+                                }}>
+                                    <Image
+                                        style={styles.tinyLogo}
+                                        source={require('../assets/checkmark.png')}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         )
                         }
                         </View>
@@ -197,4 +225,8 @@ const styles = StyleSheet.create({
         width: 75,
         height: 75,
     },
+    lottie: {
+        width: 100,
+        height: 100
+    }
   });

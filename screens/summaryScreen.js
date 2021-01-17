@@ -30,7 +30,7 @@ export default function summaryScreen ( {route} ) {
     const tableSummary = {
       tableList: ['PERCENTAGE ERROR', 'FAT', 'CARBOHYDRATE', 'PROTEIN'],
       tableData: [
-        [`${Math.round(calculatePercentError())}%`],
+        [`${Math.round(calculatePercentError())}% error compared to the labelled calories`],
         [`${fat} g  ✕  9 calories per gram of fat`],
         [`${carbs} g  ✕  4 calories per gram of carbohydrates`],
         [`${protein} g  ✕  4 calories per gram of protein`],
@@ -52,7 +52,7 @@ export default function summaryScreen ( {route} ) {
           <Row style={{...styles.head, backgroundColor: '#f7f7f7'}} flexArr={[1,2,1,1]} textStyle={styles.text}/>
           <TableWrapper style={{...styles.wrapper, backgroundColor: '#f7f7f7'}}>
             <Col data={tableSummary.tableList} style={{...styles.title, backgroundColor: '#f7f7f7'}} heightArr={[28,28]} textStyle={{...styles.textTitle, color: '#999b9e'}}/>
-            <Rows data={tableSummary.tableData} flexArr={[1, 0.8]} style={{...styles.row, backgroundColor: '#f7f7f7'}} textStyle={styles.textRow}/>
+            <Rows data={tableSummary.tableData} flexArr={[1, 0.8]} style={{...styles.row, backgroundColor: '#f7f7f7'}} textStyle={{...styles.textRow, color:'#2e41f5'}}/>
           </TableWrapper>
         </Table>
         <View style = {styles.personContainer}>
