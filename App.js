@@ -20,7 +20,7 @@ export default function App() {
   return (
     <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={summaryScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Scan">
             {props => <ScansLibrary {...props} storage={firebase.storage()} environment = {Environment}/>}
           </Stack.Screen>
